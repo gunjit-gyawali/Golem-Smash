@@ -5,9 +5,11 @@ public class player : MonoBehaviour
 {
     public float speed = 5f;
     private float moveInput;
+    private float facingDirection = 1f;
 
     playerStateList playerState;
     private Rigidbody2D rb;
+    private float defaultGravity;
     [SerializeField] private float jumpForce = 5f;
 
     [Header("Ground Check")]
@@ -17,18 +19,37 @@ public class player : MonoBehaviour
     [SerializeField] private float groundCheckX = 0.5f;
 
     [Header("Jump Buffer")]
-    [SerializeField] private float jumpBufferTime = 0.15f; // how long a jump press is remembered
+    [SerializeField] private float jumpBufferTime = 0.15f;
     private float jumpBufferCounter;
+
+    [Header("Air Jumps")]
+    [SerializeField] private int maxAirJumps = 1;
+    private int airJumpsLeft;
+
+    [Header("Dash")]
+    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashTime = 0.15f;
+    [SerializeField] private float dashCooldown = 0.5f;
+    private bool canDash = true;
+    private float dashTimer;
+    private float dashCooldownTimer;
 
     void Awake()
     {
         playerState = GetComponent<playerStateList>();
         rb = GetComponent<Rigidbody2D>();
+        defaultGravity = rb.gravityScale;
+        airJumpsLeft = maxAirJumps;
     }
 
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<float>();
+
+        if (moveInput != 0f)
+        {
+            facingDirection = Mathf.Sign(moveInput);
+        }
     }
 
     private void Move()
@@ -41,23 +62,58 @@ public class player : MonoBehaviour
 
     void Update()
     {
+        if (dashCooldownTimer > 0f)
+        {
+            dashCooldownTimer -= Time.deltaTime;
+        }
+
+        if (playerState.dashing)
+        {
+            HandleDash();
+            return;
+        }
+
         Move();
+        RefillAirJumps();
+        RefillDash();
         HandleJumpBuffer();
+    }
+
+    private void RefillAirJumps()
+    {
+        if (Grounded() && rb.linearVelocity.y <= 0.01f)
+        {
+            airJumpsLeft = maxAirJumps;
+        }
+    }
+
+    private void RefillDash()
+    {
+        if (Grounded())
+        {
+            canDash = true;
+        }
     }
 
     private void HandleJumpBuffer()
     {
-        // Count down the buffer every frame
         if (jumpBufferCounter > 0f)
         {
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        // If a jump was requested recently and we're now grounded, jump
-        if (jumpBufferCounter > 0f && Grounded())
+        if (jumpBufferCounter <= 0f) return;
+
+        if (Grounded())
         {
             Jump();
-            jumpBufferCounter = 0f; // consume the buffered input
+            jumpBufferCounter = 0f;
+        }
+        else if (airJumpsLeft > 0)
+        {
+            Jump();
+            airJumpsLeft--;
+            jumpBufferCounter = 0f;
         }
     }
 
@@ -79,7 +135,6 @@ public class player : MonoBehaviour
         }
     }
 
-    // Input callback: just records the press; Update decides when to actually jump
     void OnJump()
     {
         jumpBufferCounter = jumpBufferTime;
@@ -89,5 +144,40 @@ public class player : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         playerState.jumping = true;
+    }
+
+    void OnDash()
+    {
+        if (playerState.dashing || !canDash || dashCooldownTimer > 0f) return;
+
+        StartDash();
+    }
+
+    private void StartDash()
+    {
+        playerState.dashing = true;
+        canDash = false;
+        dashTimer = dashTime;
+        dashCooldownTimer = dashCooldown;
+        rb.gravityScale = 0f;
+        rb.linearVelocity = new Vector2(facingDirection * dashSpeed, 0f);
+    }
+
+    private void HandleDash()
+    {
+        dashTimer -= Time.deltaTime;
+        rb.linearVelocity = new Vector2(facingDirection * dashSpeed, 0f);
+
+        if (dashTimer <= 0f)
+        {
+            EndDash();
+        }
+    }
+
+    private void EndDash()
+    {
+        playerState.dashing = false;
+        rb.gravityScale = defaultGravity;
+        rb.linearVelocity = Vector2.zero;
     }
 }
