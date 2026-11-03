@@ -34,6 +34,9 @@ public class player : MonoBehaviour
     private float dashTimer;
     private float dashCooldownTimer;
 
+
+    [SerializeField] private TrailRenderer dashTrail;
+
     void Awake()
     {
         playerState = GetComponent<playerStateList>();
@@ -155,6 +158,7 @@ public class player : MonoBehaviour
 
     private void StartDash()
     {
+        dashTrail.emitting = true;
         playerState.dashing = true;
         canDash = false;
         dashTimer = dashTime;
@@ -179,5 +183,6 @@ public class player : MonoBehaviour
         playerState.dashing = false;
         rb.gravityScale = defaultGravity;
         rb.linearVelocity = Vector2.zero;
+        dashTrail.emitting = false;
     }
 }
