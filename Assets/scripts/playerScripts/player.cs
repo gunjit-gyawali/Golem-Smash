@@ -8,6 +8,7 @@ public class player : MonoBehaviour
     private float facingDirection = 1f;
 
     playerStateList playerState;
+    private PlayerInput playerInput;
     private Rigidbody2D rb;
     private float defaultGravity;
     [SerializeField] private float jumpForce = 5f;
@@ -38,6 +39,8 @@ public class player : MonoBehaviour
     [Header("Attack")]
     [SerializeField] private GameObject slashEffect;
     [SerializeField] private Vector2 slashOffset = new Vector2(1f, 0f);
+    [SerializeField] private Vector2 slashUpOffset = new Vector2(0f, 1f);
+    [SerializeField] private Vector2 slashDownOffset = new Vector2(0f, -1f);
     [SerializeField] private float slashLifetime = 0.2f;
     [SerializeField] private float attackCooldown = 0.4f;
     private float attackCooldownTimer;
@@ -45,6 +48,7 @@ public class player : MonoBehaviour
     void Awake()
     {
         playerState = GetComponent<playerStateList>();
+        playerInput = GetComponent<PlayerInput>();
         rb = GetComponent<Rigidbody2D>();
         defaultGravity = rb.gravityScale;
         airJumpsLeft = maxAirJumps;
@@ -207,14 +211,34 @@ public class player : MonoBehaviour
     {
         attackCooldownTimer = attackCooldown;
 
-        Vector3 spawnPosition = transform.position + new Vector3(facingDirection * slashOffset.x, slashOffset.y, 0f);
-        GameObject slash = Instantiate(slashEffect, spawnPosition, Quaternion.identity, transform);
+        float verticalInput = playerInput.actions["Vertical"].ReadValue<float>();
+        bool slashUp = verticalInput > 0.5f;
+        bool slashDown = !Grounded() && verticalInput < -0.5f;
 
-        Vector3 scale = slash.transform.localScale;
-        scale.x = Mathf.Abs(scale.x) * facingDirection;
-        slash.transform.localScale = scale;
-
-        Destroy(slash, slashLifetime);
+        if (slashUp)
+        {
+            SpawnSlash(slashUpOffset, 90f, 1f);
+        }
+        else if (slashDown)
+        {
+            SpawnSlash(slashDownOffset, -90f, 1f);
+        }
+        else
+        {
+            Vector2 sideOffset = new Vector2(facingDirection * slashOffset.x, slashOffset.y);
+            SpawnSlash(sideOffset, 0f, facingDirection);
+        }
     }
 
+    private void SpawnSlash(Vector2 offset, float angle, float flip)
+    {
+        Vector3 spawnPosition = transform.position + (Vector3)offset;
+        GameObject slashObject = Instantiate(slashEffect, spawnPosition, Quaternion.Euler(0f, 0f, angle), transform);
+
+        Vector3 scale = slashObject.transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * flip;
+        slashObject.transform.localScale = scale;
+
+        Destroy(slashObject, slashLifetime);
+    }
 }
