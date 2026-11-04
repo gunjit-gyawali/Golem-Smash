@@ -20,20 +20,20 @@ AnimationClip:
   m_PPtrCurves:
   - serializedVersion: 2
     curve:
-    - time: 0.016666668
+    - time: 0
       value: {fileID: -3660571561243988826, guid: e46ca3fff3915c6ae8db29023024b036, type: 3}
-    - time: 0.016666668
+    - time: 0.083333336
       value: {fileID: 1373310290039150802, guid: a90fa2a410418a4c799b5617266f7484, type: 3}
-    - time: 0.1
+    - time: 0.16666667
       value: {fileID: -1429139636971084480, guid: 0d174f5537f6871da89d98d8f7ada0af, type: 3}
-    - time: 0.18333334
+    - time: 0.25
       value: {fileID: 4559543775301443952, guid: f1e468c0b0bb79e1a92771dd5e292617, type: 3}
-    - time: 0.28333333
+    - time: 0.3
       value: {fileID: 1239187260319366027, guid: 06cdaaf4d79764ced8147aa864f173fe, type: 3}
-    - time: 0.35
+    - time: 0.31666666
       value: {fileID: -6261941741821298692, guid: c179766fc3595392eb418299235e2bec, type: 3}
     attribute: m_Sprite
-    path: Main Camera/slash
+    path: 
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -45,7 +45,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3248642557
+      path: 0
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -66,12 +66,12 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.36666667
+    m_StopTime: 0.33333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
     m_HasAdditiveReferencePose: 0
-    m_LoopTime: 1
+    m_LoopTime: 0
     m_LoopBlend: 0
     m_LoopBlendOrientation: 0
     m_LoopBlendPositionY: 0

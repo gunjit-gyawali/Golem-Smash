@@ -30,12 +30,17 @@ public class player : MonoBehaviour
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashTime = 0.15f;
     [SerializeField] private float dashCooldown = 0.5f;
+    [SerializeField] private TrailRenderer dashTrail;
     private bool canDash = true;
     private float dashTimer;
     private float dashCooldownTimer;
 
-
-    [SerializeField] private TrailRenderer dashTrail;
+    [Header("Attack")]
+    [SerializeField] private GameObject slashEffect;
+    [SerializeField] private Vector2 slashOffset = new Vector2(1f, 0f);
+    [SerializeField] private float slashLifetime = 0.2f;
+    [SerializeField] private float attackCooldown = 0.4f;
+    private float attackCooldownTimer;
 
     void Awake()
     {
@@ -68,6 +73,11 @@ public class player : MonoBehaviour
         if (dashCooldownTimer > 0f)
         {
             dashCooldownTimer -= Time.deltaTime;
+        }
+
+        if (attackCooldownTimer > 0f)
+        {
+            attackCooldownTimer -= Time.deltaTime;
         }
 
         if (playerState.dashing)
@@ -185,4 +195,26 @@ public class player : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
         dashTrail.emitting = false;
     }
+
+    void OnAttack()
+    {
+        if (playerState.dashing || attackCooldownTimer > 0f) return;
+
+        Slash();
+    }
+
+    private void Slash()
+    {
+        attackCooldownTimer = attackCooldown;
+
+        Vector3 spawnPosition = transform.position + new Vector3(facingDirection * slashOffset.x, slashOffset.y, 0f);
+        GameObject slash = Instantiate(slashEffect, spawnPosition, Quaternion.identity, transform);
+
+        Vector3 scale = slash.transform.localScale;
+        scale.x = Mathf.Abs(scale.x) * facingDirection;
+        slash.transform.localScale = scale;
+
+        Destroy(slash, slashLifetime);
+    }
+
 }

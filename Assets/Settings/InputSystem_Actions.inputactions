@@ -35,6 +35,16 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "af548879-54dd-4e97-b196-dfa0a08f9c1a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -52,7 +62,7 @@
                 {
                     "name": "negative",
                     "id": "218d78b3-ecb0-4e9b-96ed-989349d24c66",
-                    "path": "<Keyboard>/a",
+                    "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -63,7 +73,7 @@
                 {
                     "name": "positive",
                     "id": "cf9f2b51-9f50-4af5-aa2f-821181763c6b",
-                    "path": "<Keyboard>/d",
+                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -74,7 +84,7 @@
                 {
                     "name": "",
                     "id": "9f7da47a-9212-494d-b1cb-c4ece0998138",
-                    "path": "<Keyboard>/w",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -85,11 +95,22 @@
                 {
                     "name": "",
                     "id": "d8620aaf-9975-4ce2-9462-808cfe712222",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe7c60a3-afce-48f1-94b6-844d6e67685f",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
