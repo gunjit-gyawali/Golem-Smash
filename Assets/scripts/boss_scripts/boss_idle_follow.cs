@@ -4,29 +4,38 @@ public class boss_idle_follow : StateMachineBehaviour
 {
     Transform player;
     Rigidbody2D rb;
+    float enterTime;
     public float speed = 5f;
+    public float attackRange = 3f;
+    public float attackDelay = 1f;
 
-
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = animator.GetComponent<Rigidbody2D>();
+        enterTime = Time.time;
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Debug.Log("Updating boss_idle_follow state for " + animator.gameObject.name);
+        animator.GetComponent<enemy>().LookAtPlayer();
+
         Vector2 target = new Vector2(player.position.x, rb.position.y);
         Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.deltaTime);
         rb.MovePosition(newPos);
+
+        bool inRange = Vector2.Distance(player.position, rb.position) <= attackRange;
+        bool delayPassed = Time.time >= enterTime + attackDelay;
+        Debug.Log("inRange: " + inRange + " delayPassed: " + delayPassed + " timeInIdle: " + (Time.time - enterTime));
+
+        if (inRange && delayPassed)
+        {
+            animator.SetTrigger("attack");
+        }
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-    
+        animator.ResetTrigger("attack");
     }
-
 }

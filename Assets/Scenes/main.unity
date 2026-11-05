@@ -493,7 +493,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -992,7 +992,7 @@ Transform:
   - {fileID: 580107971}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1568865691
+--- !u!1001 &1859759498
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1000,13 +1000,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4384101753735033783, guid: 1ba0272fa861275d682e8885ab5f82ae, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 859842563}
+    - target: {fileID: 4384101753735033783, guid: 1ba0272fa861275d682e8885ab5f82ae, type: 3}
+      propertyPath: spriteFacesRight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6746668135934440311, guid: 1ba0272fa861275d682e8885ab5f82ae, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.62766
+      value: 5.5144
       objectReference: {fileID: 0}
     - target: {fileID: 6746668135934440311, guid: 1ba0272fa861275d682e8885ab5f82ae, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.173
+      value: 3.8062
       objectReference: {fileID: 0}
     - target: {fileID: 6746668135934440311, guid: 1ba0272fa861275d682e8885ab5f82ae, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1253,4 +1261,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 859842563}
   - {fileID: 1384679997}
-  - {fileID: 1568865691}
+  - {fileID: 1859759498}
